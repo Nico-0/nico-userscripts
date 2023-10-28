@@ -26,6 +26,47 @@
         customFunction();
     });
 
+    // Extra field for showing extra data
+    var customField = document.createElement('div');
+    customField.innerHTML = 'nothing';
+    customField.setAttribute("id", "myExtraField");
+
+    var targetDiv2 = document.getElementById('market_mutlisell_maincontent');
+    var previousToLastChild = targetDiv2.lastChild.previousElementSibling;
+    // Insert the custom element just before the last child
+    targetDiv2.insertBefore(customField, previousToLastChild);
+
+    // Table with extra data
+    function insertTableDetails(cellID, ordersTable) {
+        // Select the element you want to modify
+        const targetElement = document.getElementById(cellID); // Replace with your element's ID or selector
+        const displayElement = document.getElementById("myExtraField");
+        // Store the original content in a data attribute
+        displayElement.setAttribute("data-original-content", displayElement.innerText);
+
+        let isHovering = false;
+        // Add a mouseover event handler
+        targetElement.addEventListener("mouseover", function() {
+            if (!isHovering) {
+                // Use insertAdjacentHTML to insert the table HTML
+                displayElement.insertAdjacentHTML('afterbegin', ordersTable);
+                isHovering = true;
+            }
+        });
+
+        // Add a mouseout event handler
+        targetElement.addEventListener("mouseout", function(event) {
+             if (!targetElement.contains(event.relatedTarget)) {
+                 // Restore the original content from the data attribute
+                 const originalContent = displayElement.getAttribute("data-original-content");
+                 if (originalContent) {
+                     displayElement.innerHTML = originalContent;
+                     isHovering = false;
+                 }
+             }
+        });
+    }
+
     // Define your custom JavaScript function
     function customFunction() {
         // Your custom logic here
@@ -75,6 +116,8 @@
                             // Append the new cells to the row
                             row.appendChild(cell1);
                             row.appendChild(cell2);
+                            cell1.setAttribute("id", `sell_cell_${uniqueId}`);
+                            cell2.setAttribute("id", `buy_cell_${uniqueId}`);
 
                             // Look for the input element with the specified ID and update its value
                             var inputToUpdate = document.getElementById(`sell_${uniqueId}_price_paid`);
@@ -82,6 +125,10 @@
                             if (inputToUpdate) {
                                 inputToUpdate.value = (lowestSellOrder - 0.01).toFixed(2);
                             }
+
+                            // Set hover to table with more details
+                            insertTableDetails(`sell_cell_${uniqueId}`, data.sell_order_table);
+                            insertTableDetails(`buy_cell_${uniqueId}`, data.buy_order_table);
                         });
                     } else {
                         // If the input value is equal to 0, add two empty cells
