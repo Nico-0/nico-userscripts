@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nico Steam Multisell
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.5
 // @description  try to take over the world!
 // @author       Nico
 // @match        https://steamcommunity.com/market/multisell*
@@ -26,10 +26,16 @@
         customFunction();
     });
 
+    const blurEvent = new Event('blur', { bubbles: true, cancelable: true });
+
     // Extra field for showing extra data
     var customField = document.createElement('div');
-    customField.innerHTML = 'nothing';
+    customField.innerHTML = '-----';
     customField.setAttribute("id", "myExtraField");
+    customField.style.position = 'fixed';
+    customField.style.top = '35%';
+    customField.style.right = '0';
+    customField.style.fontSize = '36px';
 
     var targetDiv2 = document.getElementById('market_mutlisell_maincontent');
     var previousToLastChild = targetDiv2.lastChild.previousElementSibling;
@@ -125,6 +131,7 @@
                             if (inputToUpdate) {
                                 inputToUpdate.value = (lowestSellOrder - 0.01).toFixed(2);
                             }
+                            inputToUpdate.dispatchEvent(blurEvent);
 
                             // Set hover to table with more details
                             insertTableDetails(`sell_cell_${uniqueId}`, data.sell_order_table);
