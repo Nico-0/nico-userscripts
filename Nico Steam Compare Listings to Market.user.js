@@ -2,7 +2,8 @@
 // @name         Nico Steam Compare Listings to Market
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
+// @description  Logs sell listings to console for exporting to excel.
+// @description:two Logs top buy price to console, for exporting to excel.
 // @author       Nico
 // @match        https://steamcommunity.com/market/
 // @match        https://steamcommunity.com/market/multibuy*
@@ -20,10 +21,10 @@
 
     // Check which site you are on and perform different code
     if (currentURL.includes("https://steamcommunity.com/market/multibuy")) {
-        // Code for https://steamcommunity.com/market/multibuy*
+        // Code 2 for https://steamcommunity.com/market/multibuy*
         insertButton();
     } else {
-        // Code for https://steamcommunity.com/market
+        // Code 1 for https://steamcommunity.com/market
         insertElements();
     }
 
@@ -80,9 +81,7 @@
         });
     }
 
-    // Define your custom JavaScript function
     function customFunction(data) {
-        // Your custom logic here
         const resultsHtml = data.results_html;
         const parser = new DOMParser();
         const doc = parser.parseFromString(resultsHtml, 'text/html');
@@ -132,7 +131,6 @@
 
         // Add a click event listener to the custom button
         customButton.addEventListener('click', function() {
-            // Call your custom JavaScript function here
             customFunction2();
         });
 
@@ -140,7 +138,6 @@
 
     function customFunction2() {
 
-        // Define an array to store the JSON data
         var jsonData = [];
 
         // Select the table element with the class "market_multi_table"
@@ -149,9 +146,9 @@
         // Select all the table rows (tr elements) within the tbody
         var rows = table.querySelectorAll("tbody tr");
 
+        jsonData.push({ id: "id", num_id: "numId", lowest_sell: "lowestSell" });
         // Loop through each row and extract the required information
         rows.forEach(function(row) {
-            // Initialize an object to store the data for each row
             var item = {};
 
             // Extract the 'id' from the href of the first <a> element with class "market_listing_item_name_link"
@@ -164,7 +161,8 @@
 
             // Extract the 'lowest_sell' from the value attribute of the input field in the third <td> element
             var lowestSellElement = row.querySelector("td:nth-child(3) input");
-            item.lowest_sell = lowestSellElement.value.trim().split(' ')[1];
+            //item.lowest_sell = lowestSellElement.value.trim().split(' ')[1];// ARS$ 17.07
+            item.lowest_sell = lowestSellElement.value.trim().split(' ')[0].substring(1);// $0.07 USD
 
             // Push the item object to the JSON data array
             jsonData.push(item);

@@ -2,7 +2,7 @@
 // @name         Nico Steam Recent Playtime
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
+// @description  Logs game playtimes. To console for excel. For comparing stats after idling card drops. To be used in recently played tab.
 // @author       Nico
 // @match        https://steamcommunity.com/id/*/games*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com
@@ -22,18 +22,32 @@
 
     // Add a click event listener to the custom button
     customButton.addEventListener('click', function() {
-        // Call your custom JavaScript function here
         customFunction();
     });
 
-    // Define your custom JavaScript function
     function customFunction() {
-        // Your custom logic here
+
+        /*
+		<div style="top: 0px;"> // item
+		   <div class="Panel Focusable">
+			  <a href="" class="Focusable"> </a>// picture
+			  <span><a href="" class="x1">Game Name</a></span>
+			  <div>
+				 <span class="x2"><span>LAST TWO WEEKS</span>25 minutes</span>
+				 <span class="x3"><span>TOTAL PLAYED</span>51 minutes</span>
+			  </div>
+		   </div>
+		</div>
+        */
+        // replace with the auto generated css class
+        const recentClass= '.x2';
+        const totalClass = '.x3';
+
         // Select the container with a specific class that contains the list
-        const gamesListContainer = document.querySelector('.gameslistitems_List_3tY9v');
+        const gamesListContainer = document.querySelector('div[data-featuretarget="gameslist-root"]');
 
         // Select all divs of a specific class, that correspond to each item
-        const gameItems = gamesListContainer.querySelectorAll('.gameslistitems_GamesListItem_2-pQF');
+        const gameItems = gamesListContainer.querySelectorAll('[style*="top"]');
 
         // Create an array to store the extracted data
         const extractedData = [];
@@ -61,21 +75,23 @@
             }
         }
 
+        extractedData.push(`id\trecentPlaytime\tgame\ttotalPlaytime`);
         // Loop through each item row
         gameItems.forEach(gameItem => {
             // Extract ID from the href attribute
-            const idMatch = gameItem.querySelector('.gameslistitems_GameItemPortrait_1bAC6').getAttribute('href').match(/(\d+)$/);
+            const idMatch = gameItem.querySelector('[href].Focusable').getAttribute('href').match(/(\d+)$/);
             const id = idMatch ? idMatch[1] : '';
 
             // Extract game name
-            const gameName = gameItem.querySelector('.gameslistitems_GameName_22awl').textContent.trim();
+            const gameElement = gameItem.querySelector(':nth-child(1)').querySelector('span > a:only-child');
+            const gameName = gameElement.textContent.trim();
 
             // Extract recent playtime
-            const recentPlaytimeSpan = gameItem.querySelector('.gameslistitems_Hours2weeks_1_mJZ');
+            const recentPlaytimeSpan = gameItem.querySelector(recentClass);
             const recentPlaytimeText = recentPlaytimeSpan ? processPlaytimeConvert(recentPlaytimeSpan.textContent.trim().replace(/LAST TWO WEEKS/g, '')) : '';
 
             // Extract total playtime
-            const totalPlaytimeSpan = gameItem.querySelector('.gameslistitems_Hours_26nl3');
+            const totalPlaytimeSpan = gameItem.querySelector(totalClass);
             const totalPlaytimeText = totalPlaytimeSpan ? processPlaytimeConvert(totalPlaytimeSpan.textContent.trim().replace(/TOTAL PLAYED/g, '')) : '';
 
             // Add the extracted data to the array
