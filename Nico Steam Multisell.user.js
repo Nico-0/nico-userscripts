@@ -2,7 +2,7 @@
 // @name         Nico Steam Multisell
 // @namespace    http://tampermonkey.net/
 // @version      0.6
-// @description  try to take over the world!
+// @description  Automatically fills the form with 1 cent less than the top sell offer. //todo support more currencies than ars, might not be useful anymore
 // @author       Nico
 // @match        https://steamcommunity.com/market/multisell*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com
@@ -24,7 +24,6 @@
 
     // Add a click event listener to the custom button
     customButton.addEventListener('click', function() {
-        // Call your custom JavaScript function here
         customFunction();
     });
 
@@ -95,9 +94,7 @@
         });
     }
 
-    // Define your custom JavaScript function
     function customFunction() {
-        // Your custom logic here
         // Get the table element
         var table = document.querySelector(".market_multi_table");
 

@@ -2,7 +2,7 @@
 // @name         Nico ExamTopics Print Questions
 // @namespace    http://tampermonkey.net/
 // @version      0.9
-// @description  Inserts a custom button next to existing buttons and executes a custom print when clicked
+// @description  Adds a button to print to console the questions in display.
 // @author       Nico
 // @match        https://www.examtopics.com/exams/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=examtopics.com

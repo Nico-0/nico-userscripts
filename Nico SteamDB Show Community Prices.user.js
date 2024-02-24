@@ -2,10 +2,10 @@
 // @name         Nico SteamDB Show Community Prices
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
-// @author       You
+// @description  Displays market prices. //todo show in each item, instead of in a general floating table
+// @author       Nico
 // @match        https://steamdb.info/app/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=steamdb.info
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
@@ -27,11 +27,10 @@
 
     // Add a click event listener to the custom button
     customButton.addEventListener('click', function() {
-        // Call your custom JavaScript function here
         customFunction();
     });
 
-    // Add button link to Steam Exchange
+    // Add second button, link to Steam Exchange
     const newButton = customButton.cloneNode(true);
     newButton.innerHTML = '<span>Exchange</span>';
     newButton.href = `https://www.steamcardexchange.net/index.php?gamepage-appid-${appid}`;

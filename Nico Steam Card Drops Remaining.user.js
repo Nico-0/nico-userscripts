@@ -2,7 +2,7 @@
 // @name         Nico Steam Card Drops Remaining
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
+// @description  Logs games with amount of remaining drops and playtime. To console for excel. Use before idling card drops, to compare stats afterwards.
 // @author       Nico
 // @match        https://steamcommunity.com/id/*/badges*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com
@@ -22,13 +22,10 @@
 
     // Add a click event listener to the custom button
     customButton.addEventListener('click', function() {
-        // Call your custom JavaScript function here
         customFunction();
     });
 
-    // Define your custom JavaScript function
     function customFunction() {
-        // Your custom logic here
         // Select the div with class "badges_sheet"
         const badgesSheet = document.querySelector('.badges_sheet');
 
